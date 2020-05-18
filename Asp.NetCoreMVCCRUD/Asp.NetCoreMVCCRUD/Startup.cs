@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Asp.NetCoreMVCCRUD.Data;
 
 namespace Asp.NetCoreMVCCRUD
 {
@@ -27,12 +28,14 @@ namespace Asp.NetCoreMVCCRUD
         {
             services.AddControllersWithViews();
 
-            //services.AddDbContext<EmployeeContext>(options =>
-            // options.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
+            services.AddDbContext<AspNetCoreMVCCRUDContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("AspNetCoreMVCCRUDContext")));
+
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,AspNetCoreMVCCRUDContext context)
         {
             if (env.IsDevelopment())
             {
@@ -54,6 +57,8 @@ namespace Asp.NetCoreMVCCRUD
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            DbInicializador.Initialize(context);
         }
     }
 }
